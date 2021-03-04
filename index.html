@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sistema de Reservación</title>
+	<style type="text/css">
+		
+		div{
+			width:1300px; 
+			margin:0px auto;
+		}
+
+		#informacion{
+			margin:0px 0px;
+			width:700px; 
+		}
+		
+		#avion{
+			position:absolute;
+			top:40px;
+			left:620px;
+			width:600px;
+		}
+		
+		.asiento{
+			border-style:solid;
+			border-width:1px;
+			border-color:#000;
+			width:20px;
+			border-radius:50%;
+			padding:1px;
+			text-align:center;
+			background-color:gray;
+			font-weight:bolder;
+			color:white;
+			transition-property:background-color;
+			transition-duration:2s;
+		}
+
+		#a1{
+			position:absolute;
+			top:100px;
+			left:48.5%;
+				
+		}
+		#a2{
+			position:absolute;
+			top:100px;
+			left:53%;
+		}
+		#a3{
+			position:absolute;
+			top:130px;
+			left:48.5%;
+		}
+		#a4{
+			position:absolute;
+			top:130px;
+			left:53%;
+		}
+		#a5{
+			position:absolute;
+			top:160px;
+			left:48.5%;
+		}
+
+		#a6{
+			position:absolute;
+			top:160px;
+			left:53%;
+				
+		}
+		#a7{
+			position:absolute;
+			top:300px;
+			left:48.5%;
+		}
+		#a8{
+			position:absolute;
+			top:300px;
+			left:53%;
+		}
+		#a9{
+			position:absolute;
+			top:330px;
+			left:48.5%;
+		}
+		#a10{
+			position:absolute;
+			top:330px;
+			left:53%;
+		}
+		#a11{
+			position:absolute;
+			top:360px;
+			left:48.5%;
+		}
+		#a12{
+			position:absolute;
+			top:360px;
+			left:53%;
+		}
+
+		#titulo{
+			font-family:arial;
+			font-size:20pt;
+			font-weight:bolder;
+			margin:60px;
+			display:block;
+			text-shadow:0px 0px 3px #19D5EE;
+			color:#044FFE;
+		}
+		
+		input:hover{
+			box-shadow: 0px 0px 10px blue;	
+		}
+			
+		fieldset{
+			width:350px;
+			margin:30px auto;
+			//border-color:#19D5EE;
+			border-color:red;
+			border-style:solid;
+			//box-shadow: -10px 0px 30px #000,
+				    inset 0px 0px 10px #044FFE;
+			padding:10px;
+			//border-radius:5px;			 
+		}
+
+		legend{
+			font-variant:small-caps;
+			//padding:2px;
+			//font-weight:bolder;
+			//background-color:#19D5EE;
+		}
+		
+		#reset{
+			width:200px;
+			margin:0px auto;
+			display:block;
+		}
+		
+		.disponible{
+			background-color:green;
+		}
+		
+		.nodisponible{
+			background-color:red;
+		}
+
+		#mensaje{
+			width:380px;
+			height:200px;
+			border-style:solid;
+			border-width:1px;
+			//border-color:#19D5EE;
+			border-color:red;
+			text-align:center;
+			font-family:arial;
+			font-size:16pt;
+			padding-top:15px;
+			//box-shadow: -10px 0px 20px #000,
+				    inset 0px 0px 10px #044FFE;
+			border-radius:5px;
+		}
+		
+	</style>
+
+	<script text="text/javascript">
+		
+		//Consulta de Asientos
+
+		function consultaAsientos(){
+			conexion = xmlhttprequest();
+			conexion.onreadystatechange = esperaRespuesta;
+			conexion.open("POST","consultaAsiento.php",true);
+			conexion.setRequestHeader("Content-type","application/x-www-form-urlencoded");	
+			conexion.send();
+		}
+
+		function esperaRespuesta(e){
+			if(conexion.readyState == 4 ){
+				var datos = eval('('+conexion.responseText+')');
+				var div = document.getElementsByTagName("div");
+				for(r=4;r<=15;r++){
+					removeEvent(div[r],'click',reservar,false);
+					div[r].classList.remove("nodisponible");	
+					if(datos[0]["a"+String(r-3)] == 1){
+						div[r].classList.add("disponible");
+					}
+					else{
+						div[r].classList.add("nodisponible");
+					}
+				}
+				if(document.getElementsByName("clase")[0].checked){
+					for(r=4; r<=9; r++){
+						addEvent(div[r],'click',reservar,false);
+					}
+					document.getElementById("mensaje").innerHTML = 'Seleciono Primera Clase<br><br><img src="tick.png" width="100" height="100">';
+				}
+				else if(document.getElementsByName("clase")[1].checked){
+					for(r=10; r<=15; r++){
+						addEvent(div[r],'click',reservar,false);
+					}
+					document.getElementById("mensaje").innerHTML = 'Seleciono Segunda Clase.<br><br><img src="tick.png" width="100" height="100">';
+				}
+				else{
+					document.getElementById("mensaje").innerHTML = 'Se reservo el asiento.<br><br><img src="tick.png" width="100" height="100">';
+				}
+				
+			}
+			else
+				document.getElementById("mensaje").innerHTML = 'Procesando Solicitud ...<br><br><img src="cargando.gif" width="100" height="100">';
+		}
+			
+		// FUNCIONES Reservacion
+		function reservar(e){
+			var id = e.target.id, asiento="";
+			for(r=1; r< id.length; r++){
+				asiento = asiento + id[r];
+			}
+			asiento = asiento.trim();
+			var enviar = confirm("¿Desea reservar el asiento?");
+			if(enviar){
+				conexion = new xmlhttprequest();
+				conexion.onreadystatechange = esperaReservacion;
+				conexion.open("POST","reservar.php",true);
+				conexion.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+				conexion.send("asiento="+asiento);
+			}
+		}
+
+		function esperaReservacion(){
+			if(conexion.readyState == 4){
+				var dato = eval('('+conexion.responseText+')');
+				if(dato.exito == 1){
+					var radio = document.getElementsByName("clase");
+					radio[0].checked = false;
+					radio[1].checked = false;
+					consultaAsientos();
+					window.open("pdf.php?asiento="+dato.asiento,"pdf");
+				}
+			}
+			else
+				document.getElementById("mensaje").innerHTML = 'Procesando Solicitud ...<br><br><img src="cargando.gif" width="100" height="100">';
+		}
+
+
+		//FUNCIONES RESET
+
+		function reset(){
+			conexion = xmlhttprequest();
+			conexion.onreadystatechange = esperaReset;
+			conexion.open("POST","reset.php",true);
+			conexion.setRequestHeader("Content-Type","www-form-urlencoded");
+			conexion.send();
+		}
+
+		function esperaReset(){
+			if(conexion.readyState == 4){
+				var datos = eval('('+conexion.responseText+')');
+				if(datos.exito == 1){
+					var div = document.getElementsByTagName("div");
+					var radio = document.getElementsByName("clase");
+					radio[0].checked = false;
+					radio[1].checked = false;
+					document.getElementById("mensaje").innerHTML = 'Todos los asientos estan disponibles.<br><br><img src="tick.png" width="100" height="100">';
+					for(r=4;r<=15;r++){
+						removeEvent(div[r],'click',reservar,false);
+						div[r].classList.remove("nodisponible");
+						div[r].classList.add("disponible");
+					}
+				}	
+				else
+					document.getElementById("mensaje").innerHTML = "Fallo la actualización";
+			}
+			else
+				document.getElementById("mensaje").innerHTML = 'Iniciando Reset ...<br><br><img src="cargando.gif" width="100" height="100">';
+				
+		}
+
+		
+		//FUNCIONES GENERALES
+
+		addEvent(window,'load',cargar, false);
+		
+
+		function xmlhttprequest(){
+			return new XMLHttpRequest();
+		}
+
+		function cargar(){
+			var radio = document.getElementsByTagName("input");
+			addEvent(radio[0],'click',consultaAsientos,false);
+			addEvent(radio[1],'click',consultaAsientos,false);
+			addEvent(document.getElementById("reset"),'click',reset,false);
+			consultaAsientos();
+		}
+
+
+		function addEvent(ele,eve,fun,cap){
+			if(window.attachEvent)
+				ele.addAttachEvent('on'+eve,fun);
+			else
+				ele.addEventListener(eve,fun,cap);
+		}
+
+		function removeEvent(ele,eve,fun,cap){
+			if(window.detachEvent)
+				ele.detachEvent('on'+eve,fun);
+			else
+				ele.removeEventListener(eve,fun,cap);
+		}	
+	</script>
+</head>
+<body>
+	<div>
+		<div id="informacion">
+			<span id="titulo">Sistema de Reservaci&oacute;n.</span>	
+			<fieldset id="conj">
+				<legend>Clases</legend>
+				<input type="radio" name="clase" value="pClase"><label>Primera Clase</label><br><br>
+				<input type="radio" name="clase" value="sClase"><label>Segunda Clase</label><br><br>
+			</fieldset>
+			<fieldset>
+				<legend>Reset</legend>
+				<input type="button" name="reset" id="reset" value="Reset">
+			</fieldset>
+			<div id="mensaje"></div>	
+		</div>	 	
+		<div id="avion">	
+			<img src="airplane4.png" width="640px" height="580px">
+			<div id="a1" class="asiento">1</div>
+			<div id="a2" class="asiento">2</div>
+			<div id="a3" class="asiento">3</div>
+			<div id="a4" class="asiento">4</div>
+			<div id="a5" class="asiento">5</div>
+			<div id="a6" class="asiento">6</div>
+			<div id="a7" class="asiento">7</div>
+			<div id="a8" class="asiento">8</div>
+			<div id="a9" class="asiento">9</div>
+			<div id="a10" class="asiento">10</div>
+			<div id="a11" class="asiento">11</div>
+			<div id="a12" class="asiento">12</div>
+		</div>	
+	</div>
+</body>
+</html>

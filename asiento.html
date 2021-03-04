@@ -1,0 +1,71 @@
+<html>
+<head><title>cancelar</title>
+
+<style type="text/css">
+		div{
+			width:1300px; 
+			margin:0px auto;
+		}
+
+		#informacion{
+			margin:0px 0px;
+			width:700px; 
+		}
+</style>
+<script text="text/javascript">
+
+function filtraNumeros(){
+	
+
+     
+
+        if(event.keyCode>=48 && event.keyCode<=57){
+         event.returnValue=true;
+        }
+        else {event.returnValue=false;}
+     }
+function validarDatos(){
+          alert("asiento cancelado");
+function reset(){
+			conexion = xmlhttprequest();
+			conexion.onreadystatechange = esperaReset;
+			conexion.open("POST","reset.php",true);
+			conexion.setRequestHeader("Content-Type","www-form-urlencoded");
+			conexion.send();
+		}
+
+		function esperaReset(){
+			if(conexion.readyState == 4){
+				var datos = eval('('+conexion.responseText+')');
+				if(datos.exito == 1){
+					var div = document.getElementsByTagName("div");
+					var radio = document.getElementsByName("clase");
+					radio[0].checked = false;
+					radio[1].checked = false;
+					document.getElementById("mensaje").innerHTML = 'Todos los asientos estan disponibles.<br><br><img src="tick.png" width="100" height="100">';
+					for(r=4;r<16;r++){
+						removeEvent(div[r],'click',reservar,false);
+						div[r].classList.remove("nodisponible");
+						div[r].classList.add("disponible");
+					}
+				}	
+				else
+					document.getElementById("mensaje").innerHTML = "Fallo la actualización";
+			}
+			else
+				document.getElementById("mensaje").innerHTML = 'Iniciando Reset ...<br><br><img src="cargando.gif" width="100" height="100">';
+				
+		}
+
+
+  	
+</script>
+<head>
+<boby>
+ <div><div id="informacion">
+    Asiento:<input type="text" name="nombre" onkeypress="filtraNumeros()"><br>
+      <A HREF="avion2.html"><input type="button" value="ENVIAR" onclick="validarDatos()"></a>
+</div>
+  </form>
+</body>
+</html>

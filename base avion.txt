@@ -1,0 +1,78 @@
+create database aereopuerto;
+use aereopuerto;
+
+create table avion(asiento int,disponible boolean);
+
+insert into avion values(1,true);
+insert into avion values(2,true);
+insert into avion values(3,true);
+insert into avion values(4,true);
+insert into avion values(5,true);
+insert into avion values(6,true);
+insert into avion values(7,true);
+insert into avion values(8,true);
+insert into avion values(9,true);
+insert into avion values(10,true);
+insert into avion values(11,true);
+insert into avion values(12,true);
+
+
+
+create table avion2(asiento int,disponible boolean);
+
+insert into avion2 values(1,true);
+insert into avion2 values(2,true);
+insert into avion2 values(3,true);
+insert into avion2 values(4,true);
+insert into avion2 values(5,true);
+insert into avion2 values(6,true);
+insert into avion2 values(7,true);
+insert into avion2 values(8,true);
+insert into avion2 values(9,true);
+insert into avion2 values(10,true);
+insert into avion2 values(11,true);
+insert into avion2 values(12,true);
+
+
+create table avion3(asiento int,disponible boolean);
+
+insert into avion3 values(1,true);
+insert into avion3 values(2,true);
+insert into avion3 values(3,true);
+insert into avion3 values(4,true);
+insert into avion3 values(5,true);
+insert into avion3 values(6,true);
+insert into avion3 values(7,true);
+insert into avion3 values(8,true);
+insert into avion3 values(9,true);
+insert into avion3 values(10,true);
+insert into avion3 values(11,true);
+insert into avion3 values(12,true);
+
+
+create table avion4(asiento int,disponible boolean);
+
+insert into avion4 values(1,true);
+insert into avion4 values(2,true);
+insert into avion4 values(3,true);
+insert into avion4 values(4,true);
+insert into avion4 values(5,true);
+insert into avion4 values(6,true);
+insert into avion4 values(7,true);
+insert into avion4 values(8,true);
+insert into avion4 values(9,true);
+insert into avion4 values(10,true);
+insert into avion4 values(11,true);
+insert into avion4 values(12,true);
+
+
+
+
+
+create table reg_usuarios(clase varchar(20),nombre varchar(20),
+              paterno varchar(20),materno varchar(20),  
+              telefono varchar(20),correo varchar(20),
+              fecha varchar(20),destino varchar(20),
+              horario varchar(20),precio varchar(20));
+ 
+
